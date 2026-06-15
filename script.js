@@ -1,66 +1,67 @@
-// Mobile Navigation
-const menuIcon = document.getElementById('menu-icon');
-const mobileNav = document.getElementById('mobileNav');
-const overlay = document.getElementById('overlay');
+// ==================== MOBILE NAVIGATION ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const menuIcon = document.getElementById('menu-icon');
+    const mobileNav = document.getElementById('mobileNav');
+    const overlay = document.getElementById('overlay');
 
-function openMobileNav() {
-    mobileNav.classList.add('active');
-    overlay.classList.add('active');
-    menuIcon.setAttribute('aria-expanded', 'true');
-    mobileNav.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-    
-    // Change icon to X
-    menuIcon.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
-    menuIcon.setAttribute('aria-label', 'Fermer le menu');
-}
+    if (!menuIcon) return; 
 
-function closeMobileNav() {
-    mobileNav.classList.remove('active');
-    overlay.classList.remove('active');
-    menuIcon.setAttribute('aria-expanded', 'false');
-    mobileNav.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    
-    // Change icon back to bars
-    menuIcon.innerHTML = '<i class="fa-solid fa-bars" aria-hidden="true"></i>';
-    menuIcon.setAttribute('aria-label', 'Ouvrir le menu');
-}
-
-menuIcon.addEventListener('click', () => {
-    if (mobileNav.classList.contains('active')) {
-        closeMobileNav();
-    } else {
-        openMobileNav();
+    // 1. Fonction d'ouverture
+    function openMobileNav() {
+        mobileNav.classList.add('active');
+        if (overlay) overlay.classList.add('active');
+        menuIcon.setAttribute('aria-expanded', 'true');
+        mobileNav.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        
+        // Échange de classes propre pour la croix (pas de innerHTML)
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-xmark');
+        menuIcon.setAttribute('aria-label', 'Fermer le menu');
     }
+
+    // 2. Fonction de fermeture
+    function closeMobileNav() {
+        mobileNav.classList.remove('active');
+        if (overlay) overlay.classList.remove('active');
+        menuIcon.setAttribute('aria-expanded', 'false');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = ''; // Restaure le scroll proprement
+        
+        // Échange de classes propre pour les 3 traits
+        menuIcon.classList.remove('fa-xmark');
+        menuIcon.classList.add('fa-bars');
+        menuIcon.setAttribute('aria-label', 'Ouvrir le menu');
+    }
+
+    // 3. Écouteur de clic sur le bouton burger
+    menuIcon.addEventListener('click', function() {
+        if (mobileNav.classList.contains('active')) {
+            closeMobileNav();
+        } else {
+            openMobileNav();
+        }
+    });
+
+    // 4. Fermeture au clic sur l'overlay
+    if (overlay) {
+        overlay.addEventListener('click', closeMobileNav);
+    }
+
+    // 5. Fermeture avec la touche Échap (Escape)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+            closeMobileNav();
+        }
+    });
+
+    // Expose la fonction globalement pour les onclick="closeMobileNav()" du HTML
+    window.closeMobileNav = closeMobileNav;
 });
 
-// Close mobile nav on escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-        closeMobileNav();
-    }
-});
 
-// Header scroll effect
-const header = document.querySelector('.header');
-let lastScroll = 0;
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > 100) {
-        header.style.padding = '0.5rem 1.5rem';
-        header.style.backgroundColor = 'rgba(22, 22, 22, 0.95)';
-    } else {
-        header.style.padding = '0.75rem 2rem';
-        header.style.backgroundColor = 'rgba(22, 22, 22, 0.85)';
-    }
-    
-    lastScroll = currentScroll;
-});
-
-// Smooth scroll for anchor links
+// ==================== ANIMATIONS & SMOOTH SCROLL ====================
+// Smooth scroll pour les liens d'ancrage
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -74,7 +75,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Intersection Observer for fade-in animations
+// Intersection Observer pour les animations d'affichage (Fade-in)
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -89,23 +90,21 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for animation
+// Observe les éléments enfants de la boîte d'info pour les animer
 document.querySelectorAll('.info-box > *').forEach((el, index) => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
     el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
     observer.observe(el);
 });
+
+
 // ==================== LIGHTBOX GALLERY ====================
 let currentGallery = [];
 let currentIndex = 0;
 
 function openLightbox(element) {
     const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightboxImg');
-    const lightboxCaption = document.getElementById('lightboxCaption');
-    
-    // Get all images from the same gallery
     const gallery = element.closest('.gallery-masonry, .club-carousel');
     const items = gallery.querySelectorAll('.gallery-item, .carousel-main');
     
@@ -114,11 +113,9 @@ function openLightbox(element) {
         caption: item.querySelector('.gallery-overlay span, .carousel-caption p')?.textContent || ''
     }));
     
-    // Find current index
     const clickedSrc = element.querySelector('img').src;
     currentIndex = currentGallery.findIndex(item => item.src === clickedSrc);
     
-    // Show lightbox
     updateLightbox();
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -152,15 +149,16 @@ function navigateLightbox(direction) {
     updateLightbox();
 }
 
-// Keyboard navigation
+// Navigation Lightbox au clavier
 document.addEventListener('keydown', (e) => {
     const lightbox = document.getElementById('lightbox');
-    if (!lightbox.classList.contains('active')) return;
+    if (!lightbox || !lightbox.classList.contains('active')) return;
     
     if (e.key === 'Escape') closeLightbox({ target: lightbox, currentTarget: lightbox });
     if (e.key === 'ArrowLeft') navigateLightbox(-1);
     if (e.key === 'ArrowRight') navigateLightbox(1);
 });
+
 
 // ==================== CLUB CAROUSEL ====================
 const clubPhotos = [
@@ -192,22 +190,24 @@ function changeCarousel(index) {
     const badge = document.querySelector('.caption-badge');
     const thumbs = document.querySelectorAll('.thumb');
     
-    // Update main image with fade
+    if (!mainImg) return;
+
+    // Animation de transition fluide (Fade)
     mainImg.style.opacity = '0';
     setTimeout(() => {
         mainImg.src = clubPhotos[index].src;
-        caption.textContent = clubPhotos[index].caption;
-        badge.textContent = clubPhotos[index].badge;
+        if (caption) caption.textContent = clubPhotos[index].caption;
+        if (badge) badge.textContent = clubPhotos[index].badge;
         mainImg.style.opacity = '1';
     }, 200);
     
-    // Update thumbs
+    // Mise à jour de la classe active des miniatures
     thumbs.forEach((thumb, i) => {
         thumb.classList.toggle('active', i === index);
     });
 }
 
-// Touch swipe for carousel
+// Gestion du balayage tactile (Swipe) pour mobile sur le Carousel
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -215,22 +215,26 @@ const carousel = document.getElementById('clubCarousel');
 if (carousel) {
     carousel.addEventListener('touchstart', e => {
         touchStartX = e.changedTouches[0].screenX;
-    });
+    }, { passive: true });
     
     carousel.addEventListener('touchend', e => {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
-    });
+    }, { passive: true });
 }
 
 function handleSwipe() {
     const currentThumb = document.querySelector('.thumb.active');
     const thumbs = Array.from(document.querySelectorAll('.thumb'));
+    if (!currentThumb || thumbs.length === 0) return;
+
     const currentIndex = thumbs.indexOf(currentThumb);
     
+    // Swipe vers la gauche (suivant)
     if (touchEndX < touchStartX - 50 && currentIndex < thumbs.length - 1) {
         changeCarousel(currentIndex + 1);
     }
+    // Swipe vers la droite (précédent)
     if (touchEndX > touchStartX + 50 && currentIndex > 0) {
         changeCarousel(currentIndex - 1);
     }
