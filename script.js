@@ -239,7 +239,7 @@ function handleSwipe() {
         changeCarousel(currentIndex - 1);
     }
 }
-const form = document.getElementById('form');
+const form = document.getElementById('contactForm');
 const submitBtn = form.querySelector('button[type="submit"]');
 
 form.addEventListener('submit', async (e) => {
