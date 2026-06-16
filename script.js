@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!menuIcon) return; 
 
-    // 1. Fonction d'ouverture
+    
     function openMobileNav() {
         mobileNav.classList.add('active');
         if (overlay) overlay.classList.add('active');
@@ -14,13 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileNav.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
         
-        // Échange de classes propre pour la croix (pas de innerHTML)
+        
         menuIcon.classList.remove('fa-bars');
         menuIcon.classList.add('fa-xmark');
         menuIcon.setAttribute('aria-label', 'Fermer le menu');
     }
 
-    // 2. Fonction de fermeture
+    
     function closeMobileNav() {
         mobileNav.classList.remove('active');
         if (overlay) overlay.classList.remove('active');
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         menuIcon.setAttribute('aria-label', 'Ouvrir le menu');
     }
 
-    // 3. Écouteur de clic sur le bouton burger
+    
     menuIcon.addEventListener('click', function() {
         if (mobileNav.classList.contains('active')) {
             closeMobileNav();
@@ -43,25 +43,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 4. Fermeture au clic sur l'overlay
+    
     if (overlay) {
         overlay.addEventListener('click', closeMobileNav);
     }
 
-    // 5. Fermeture avec la touche Échap (Escape)
+    
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
             closeMobileNav();
         }
     });
 
-    // Expose la fonction globalement pour les onclick="closeMobileNav()" du HTML
+    
     window.closeMobileNav = closeMobileNav;
 });
 
 
 // ==================== ANIMATIONS & SMOOTH SCROLL ====================
-// Smooth scroll pour les liens d'ancrage
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
@@ -75,7 +75,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Intersection Observer pour les animations d'affichage (Fade-in)
+// Intersection Observer 
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -90,7 +90,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe les éléments enfants de la boîte d'info pour les animer
+
 document.querySelectorAll('.info-box > *').forEach((el, index) => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
@@ -149,7 +149,7 @@ function navigateLightbox(direction) {
     updateLightbox();
 }
 
-// Navigation Lightbox au clavier
+
 document.addEventListener('keydown', (e) => {
     const lightbox = document.getElementById('lightbox');
     if (!lightbox || !lightbox.classList.contains('active')) return;
@@ -192,7 +192,7 @@ function changeCarousel(index) {
     
     if (!mainImg) return;
 
-    // Animation de transition fluide (Fade)
+    
     mainImg.style.opacity = '0';
     setTimeout(() => {
         mainImg.src = clubPhotos[index].src;
@@ -201,13 +201,13 @@ function changeCarousel(index) {
         mainImg.style.opacity = '1';
     }, 200);
     
-    // Mise à jour de la classe active des miniatures
+    
     thumbs.forEach((thumb, i) => {
         thumb.classList.toggle('active', i === index);
     });
 }
 
-// Gestion du balayage tactile (Swipe) pour mobile sur le Carousel
+
 let touchStartX = 0;
 let touchEndX = 0;
 
@@ -230,12 +230,48 @@ function handleSwipe() {
 
     const currentIndex = thumbs.indexOf(currentThumb);
     
-    // Swipe vers la gauche (suivant)
+    
     if (touchEndX < touchStartX - 50 && currentIndex < thumbs.length - 1) {
         changeCarousel(currentIndex + 1);
     }
-    // Swipe vers la droite (précédent)
+    
     if (touchEndX > touchStartX + 50 && currentIndex > 0) {
         changeCarousel(currentIndex - 1);
     }
 }
+const form = document.getElementById('form');
+const submitBtn = form.querySelector('button[type="submit"]');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    formData.append("access_key", "9ae81a24-2bd4-4ed6-8325-d218ca2373bd");
+
+    const originalText = submitBtn.textContent;
+
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Success! Your message has been sent.");
+            form.reset();
+        } else {
+            alert("Error: " + data.message);
+        }
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});

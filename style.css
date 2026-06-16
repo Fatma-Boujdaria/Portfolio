@@ -140,6 +140,7 @@ header.scrolled .logo {
     margin: 0 auto;
 }
 
+
 .nav_links li a {
     position: relative;
     color: rgba(255,255,255,0.75);
@@ -176,10 +177,10 @@ header.scrolled .nav_links li a:hover { color: var(--navy); }
     font-family: "Font Awesome 6 Free";
     font-weight: 900;
     font-size: 1.8rem;
-    color: var(--white); /* Blanche par défaut sur la première page */
+    color: var(--white); 
     cursor: pointer;
-    display: none;       /* Cachée sur PC */
-    z-index: 1001;       /* Reste toujours au-dessus */
+    display: none;       
+    z-index: 1001;      
     transition: var(--transition);
 
 
@@ -268,15 +269,15 @@ section {
 .about-container {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Pousse les blocs aux deux extrémités */
+    justify-content: space-between; 
     width: 100%;
-    max-width: 100%;                /* Permet d'occuper tout l'écran réel */
-    padding-left: 2rem;             /* Réduit au minimum l'espace vide à l'extrême gauche */
-    padding-right: 2rem;            /* Réduit au minimum l'espace vide à l'extrême droite */
+    max-width: 100%;                
+    padding-left: 2rem;             
+    padding-right: 2rem;            
     box-sizing: border-box;
-    position: relative;  /*INDISPENSABLE pour bloquer l'absolu ici */
-    min-height: 90vh;   /* Prend toute la hauteur de l'écran */
-    overflow: hidden;    /* Évite les bugs de débordement */
+    position: relative;  
+    min-height: 90vh;   
+    overflow: hidden;    
 }
 
 .about img {
@@ -299,9 +300,9 @@ section {
     align-items: flex-start;
     gap: 1.4rem;
     
-    position: absolute;  /* Reste dans la section et défile avec elle */
-    left: 4vw;           /* Collé à gauche (4% de la largeur de l'écran) */
-    top: 50%;            /* Centre verticalement */
+    position: absolute;  
+    left: 0vw;           
+    top: 40%;            
     transform: translateY(-50%);
     
     width: 350px;
@@ -315,30 +316,40 @@ section {
     align-items: flex-start;
     gap: 1.4rem;
 
-    position: absolute;  /* Reste dans la section et défile avec elle */
-    right: 0vw;          /* Collé à droite (4% de la largeur de l'écran) */
-    top: 50%;            /* Centre verticalement */
+    position: absolute;  
+    right: 0vw;          
+    top: 50%;            
     transform: translateY(-50%);
     
-    width: 350px;        /* Un peu plus large pour le confort de lecture de ton texte */
+    width: 350px;        
     z-index: 10;
 }
 
 .info-box h1 {
-    font-size: clamp(2rem, 3vw, 2.5rem);
+    font-size: clamp(2rem, 5vw, 4rem); 
     font-weight: 700;
     color: var(--white);
+    white-space: nowrap;               
+    overflow: hidden;                  
+    text-overflow: ellipsis;           
 }
-
+.surname{
+    color:var(--gold);
+    font-size: clamp(4rem, 2.5vw, 3rem);
+    font-weight: 700;
+}
 .tagline {
     font-size: 1rem;
-    color: rgba(255,255,255,0.75);
+    color: var(--white);
     font-weight: 600;
     max-width: 370px;
     line-height: 2;
-    font-family: 'Inter', sans-serif;
+    
 }
-
+p{
+    font-size: 1.2rem;
+    color: var(--text-on-dark);
+}
 
 
 .btn {
@@ -472,7 +483,7 @@ section {
 
 .timeline-item:nth-child(odd) {
     left: 0;
-    text-align: right;
+    text-align: left;
     padding-right: 3.8rem;
 }
 
@@ -1413,20 +1424,20 @@ section {
     gap: 1.4rem;
 }
 
-/* Correction pour rendre les liens lisibles sur fond blanc */
+
 .mobile-nav a {
-    color: var(--navy); /* Assure-toi que --navy est bien sombre */
+    color: var(--navy); 
     font-size: 1.2rem;
     font-weight: 600;
-    padding: 1rem 0; /* Plus de padding pour une zone de clic plus large */
+    padding: 1rem 0; 
     display: block;
     transition: var(--transition);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    width: 100%; /* Cliquable sur toute la largeur */
+    width: 100%; 
 }
 
-/* Effet au survol/clic */
+
 .mobile-nav a:hover, 
 .mobile-nav a:active {
     color: var(--gold-dark);
@@ -1473,12 +1484,12 @@ section {
 
     .about-container {
         display: flex !important;
-        flex-direction: column !important; /* Force l'empilement vertical */
+        flex-direction: column !important; 
         justify-content: center !important;
         align-items: center !important;
-        gap: 2.4rem;
+        gap: 3rem;
         text-align: center;
-        min-height: auto !important;       /* Permet à la page de s'allonger */
+        min-height: auto !important;      
         padding: 6rem 5% 3rem 5% !important;
         position: relative;
     }
@@ -1488,20 +1499,20 @@ section {
         left: auto; bottom: auto;
         text-align: center;
         align-items: center;
-        width: 100% !important;            /* Prends toute la largeur sur mobile */
+        width: 100% !important;            
         max-width: 100% !important;
     }
 
-    /*  AJOUTE CE BLOC COMPLET QUI MANQUAIT RADOUNEMENT */
+    
     .about-me {
-        position: static !important;       /* Annule le mode absolu */
-        transform: none !important;        /* Supprime le centrage vertical forcé du PC */
-        width: 100% !important;            /* Prends toute la largeur */
-        max-width: 480px !important;       /* Évite que le texte soit trop large sur tablette */
+        position: static !important;       
+        transform: none !important;        
+        width: 100% !important;            
+        max-width: 480px !important;       
         text-align: center !important;
         align-items: center !important;
         
-        /* Style optionnel pour rendre le texte ultra-lisible par dessus le fond */
+        
         background: rgba(0, 0, 0, 0.65); 
         padding: 1.5rem;
         border-radius: 16px;
