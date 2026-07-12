@@ -253,15 +253,22 @@ form.addEventListener('submit', async (e) => {
     submitBtn.textContent = "Sending...";
     submitBtn.disabled = true;
 
-    try {
+try {
+        const object = Object.fromEntries(formData);
+        object.access_key = "9ae81a24-2bd4-4ed6-8325-d218ca2373bd"; 
+
         const response = await fetch("https://api.web3forms.com/submit", {
             method: "POST",
-            body: formData
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(object)
         });
 
         const data = await response.json();
 
-        if (response.ok) {
+        if (data.success) { 
             alert("Success! Your message has been sent.");
             form.reset();
         } else {
